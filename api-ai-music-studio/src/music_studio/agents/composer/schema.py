@@ -1,5 +1,5 @@
 from typing import List
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 import re
 
 class ComposerOutput(BaseModel):
@@ -21,7 +21,7 @@ class ComposerOutput(BaseModel):
     chord_progression: List[str] = Field(..., min_items=4, description="Chord progression with at least 4 chords")
     melody_notes: List[str] = Field(..., min_items=8, description="Melody notes with at least 8 notes in simplified LilyPond format")
 
-    @validator('key')
+    @field_validator('key')
     def validate_key(cls, v: str) -> str:
         # Accept keys like C, Cm, C#, C#m, Am, G#m, etc.
         pattern = r"^[A-G](#|b)?m?$"
@@ -29,14 +29,14 @@ class ComposerOutput(BaseModel):
             raise ValueError('Key must be a valid musical key like "C", "G#m", "Am"')
         return v
 
-    @validator('chord_progression', each_item=True)
+    @field_validator('chord_progression', mode='after', each_item=True)
     def non_empty_chords(cls, v: str) -> str:
         v = v.strip()
         if not v:
             raise ValueError('Chord strings must be non-empty and not just whitespace')
         return v
 
-    @validator('melody_notes', each_item=True)
+    @field_validator('melody_notes', mode='after', each_item=True)
     def non_empty_melody_notes(cls, v: str) -> str:
         v = v.strip()
         if not v:
