@@ -40,8 +40,11 @@ def main():
     parser.add_argument('prompt', nargs='?', default="Compose a relaxing piano melody", help="The user prompt for song creation")
     args = parser.parse_args()
 
-    validated_output = run_composer(args.prompt)
-    print("Validated Composer Output:", validated_output)
+    try:
+        validated_output = run_composer(args.prompt)
+        print("Validated Composer Output:", validated_output)
+    except Exception as e:
+        print("Exception:", e)
 
 composer_agent = Agent(
     name="Composer",
