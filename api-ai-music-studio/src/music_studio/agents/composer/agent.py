@@ -22,20 +22,29 @@ set_tracing_disabled(False)
 env = Environment(loader=FileSystemLoader('api-ai-music-studio/src/music_studio/agents/composer'))
 template = env.get_template('prompt.jinja')
 
-user_prompt = "Compose a relaxing piano melody"
-rendered_prompt = template.render(user_prompt=user_prompt)
+import argparse
+
+def run_composer(user_prompt: str) -> ComposerOutput:
+    rendered_prompt = template.render(user_prompt=user_prompt)
+    response = Runner.run_sync(composer_agent, rendered_prompt)
+    try:
+        result_json = json.loads(response.final_output)
+        validated_output = ComposerOutput.model_validate(result_json)
+        return validated_output
+    except (json.JSONDecodeError, Exception) as e:
+        print("Error parsing/validating output:", e)
+        raise
+
+def main():
+    parser = argparse.ArgumentParser(description="Run Composer Agent with a user prompt.")
+    parser.add_argument('prompt', nargs='?', default="Compose a relaxing piano melody", help="The user prompt for song creation")
+    args = parser.parse_args()
+
+    validated_output = run_composer(args.prompt)
+    print("Validated Composer Output:", validated_output)
 
 composer_agent = Agent(
     name="Composer",
     instructions="",
     model="gpt-4.1",
 )
-
-response = Runner.run_sync(composer_agent, rendered_prompt)
-
-try:
-    result_json = json.loads(response.final_output)
-    validated_output = ComposerOutput.model_validate(result_json)
-    print("Validated Composer Output:", validated_output)
-except (json.JSONDecodeError, Exception) as e:
-    print("Error parsing/validating output:", e)
