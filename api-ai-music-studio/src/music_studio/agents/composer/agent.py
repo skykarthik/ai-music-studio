@@ -23,6 +23,7 @@ env = Environment(loader=FileSystemLoader('api-ai-music-studio/src/music_studio/
 template = env.get_template('prompt.jinja')
 
 import argparse
+import sys
 
 def run_composer(user_prompt: str) -> ComposerOutput:
     rendered_prompt = template.render(user_prompt=user_prompt)
@@ -32,7 +33,7 @@ def run_composer(user_prompt: str) -> ComposerOutput:
         validated_output = ComposerOutput.model_validate(result_json)
         return validated_output
     except (json.JSONDecodeError, Exception) as e:
-        print("Error parsing/validating output:", e)
+        print("Error parsing/validating output:", e, file=sys.stderr)
         raise
 
 def main():
@@ -42,9 +43,9 @@ def main():
 
     try:
         validated_output = run_composer(args.prompt)
-        print("Validated Composer Output:", validated_output)
+        print("Validated Composer Output:", validated_output, flush=True)
     except Exception as e:
-        print("Exception:", e)
+        print("Exception:", e, file=sys.stderr, flush=True)
 
 composer_agent = Agent(
     name="Composer",
