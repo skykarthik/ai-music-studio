@@ -35,7 +35,7 @@ response = Runner.run_sync(composer_agent, rendered_prompt)
 
 try:
     result_json = json.loads(response.final_output)
-    validated_output = ComposerOutput.parse_obj(result_json)
+    validated_output = ComposerOutput.model_validate(result_json)
     print("Validated Composer Output:", validated_output)
 except (json.JSONDecodeError, Exception) as e:
     print("Error parsing/validating output:", e)
