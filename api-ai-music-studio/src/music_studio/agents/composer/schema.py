@@ -29,16 +29,18 @@ class ComposerOutput(BaseModel):
             raise ValueError('Key must be a valid musical key like "C", "G#m", "Am"')
         return v
 
-    @field_validator('chord_progression', mode='after', each_item=True)
-    def non_empty_chords(cls, v: str) -> str:
-        v = v.strip()
-        if not v:
-            raise ValueError('Chord strings must be non-empty and not just whitespace')
-        return v
+    @field_validator('chord_progression', mode='after')
+    def non_empty_chords(cls, chords: List[str]) -> List[str]:
+        for chord in chords:
+            chord_stripped = chord.strip()
+            if not chord_stripped:
+                raise ValueError('Chord strings must be non-empty and not just whitespace')
+        return chords
 
-    @field_validator('melody_notes', mode='after', each_item=True)
-    def non_empty_melody_notes(cls, v: str) -> str:
-        v = v.strip()
-        if not v:
-            raise ValueError('Melody note strings must be non-empty and not just whitespace')
-        return v
+    @field_validator('melody_notes', mode='after')
+    def non_empty_melody_notes(cls, notes: List[str]) -> List[str]:
+        for note in notes:
+            note_stripped = note.strip()
+            if not note_stripped:
+                raise ValueError('Melody note strings must be non-empty and not just whitespace')
+        return notes
