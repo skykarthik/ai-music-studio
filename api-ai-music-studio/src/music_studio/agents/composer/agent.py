@@ -22,7 +22,7 @@ set_tracing_disabled(False)
 env = Environment(loader=FileSystemLoader('api-ai-music-studio/src/music_studio/agents/composer'))
 template = env.get_template('prompt.jinja')
 
-user_prompt = "create new song"
+user_prompt = "Compose a relaxing piano melody"
 rendered_prompt = template.render(user_prompt=user_prompt)
 
 composer_agent = Agent(
