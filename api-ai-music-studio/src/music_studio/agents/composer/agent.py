@@ -2,7 +2,7 @@ import os
 import json
 from dotenv import load_dotenv
 from jinja2 import Environment, FileSystemLoader
-from openai import AsyncAzureOpenAI
+from openai import AsyncAzureOpenAI, AsyncOpenAI, AsyncAPIResponse
 from agents import Agent, Runner, set_default_openai_client, set_tracing_export_api_key, set_tracing_disabled
 from music_studio.agents.composer.schema import ComposerOutput
 
