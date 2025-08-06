@@ -1,14 +1,13 @@
 import os
-import pytest
+import asyncio
 from dotenv import load_dotenv
 from openai import AsyncAzureOpenAI
 
 load_dotenv()
 
-@pytest.mark.asyncio
-async def test_azure_openai_connection():
+async def main():
     """
-    Tests the connection to Azure OpenAI by sending a simple prompt.
+    Checks the connection to Azure OpenAI by sending a simple prompt.
     """
     # Load credentials from .env file
     api_key = os.getenv("AZURE_OPENAI_API_KEY")
@@ -45,3 +44,7 @@ async def test_azure_openai_connection():
     # Assert that we got a response
     assert completion.choices[0].message.content is not None
     assert len(completion.choices[0].message.content) > 0
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
