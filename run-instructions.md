@@ -34,6 +34,7 @@ Execute the test using `pytest`:
 
 ```bash
 pytest tests/test.py
+uv run -m pytest tests/test.py
 ```
 
 If the connection is successful and the setup is correct, the test should pass without errors.

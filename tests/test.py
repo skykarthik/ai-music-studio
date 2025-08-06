@@ -41,7 +41,7 @@ async def test_azure_openai_connection():
         ],
         max_tokens=10,
     )
-
+    print(completion)
     # Assert that we got a response
     assert completion.choices[0].message.content is not None
     assert len(completion.choices[0].message.content) > 0
