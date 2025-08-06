@@ -1,18 +1,17 @@
-import asyncio
 import os
 
 from dotenv import load_dotenv
-from openai import AsyncAzureOpenAI
+from openai import AzureOpenAI
 
 # Load environment variables from .env file
 load_dotenv()
 
 
-async def main():
+def main():
     """Tests the Azure OpenAI client chat completions API."""
     try:
-        # Initialize the aysnc Azure OpenAI client
-        client = AsyncAzureOpenAI(
+        # Initialize the Azure OpenAI client
+        client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_API_KEY"),
             azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
             azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
@@ -21,7 +20,7 @@ async def main():
 
         # Create a chat completion request
         print("Sending request to Azure OpenAI...")
-        response = await client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4.1",
             messages=[
                 {"role": "system", "content": "You are a creative storyteller."},
@@ -41,5 +40,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    # Run the async function
-    asyncio.run(main())
+    # Run the function
+    main()
